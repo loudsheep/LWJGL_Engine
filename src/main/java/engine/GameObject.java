@@ -47,7 +47,7 @@ public class GameObject {
         }
     }
 
-    public void statr() {
+    public void start() {
         for (int i = 0; i < components.size(); i++) {
             components.get(i).start();
         }

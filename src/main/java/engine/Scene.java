@@ -19,7 +19,7 @@ public abstract class Scene {
 
     public void start() {
         for (GameObject go : gameObjects) {
-            go.statr();
+            go.start();
         }
         isRunning = true;
     }
@@ -29,7 +29,7 @@ public abstract class Scene {
             gameObjects.add(gameObject);
         } else {
             gameObjects.add(gameObject);
-            gameObject.statr();
+            gameObject.start();
         }
     }
 
