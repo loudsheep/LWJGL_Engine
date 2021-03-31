@@ -1,7 +1,6 @@
 package engine;
 
 import org.joml.Vector2f;
-import org.lwjgl.system.CallbackI;
 
 public class Transform {
     public Vector2f position;
