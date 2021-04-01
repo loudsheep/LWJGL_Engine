@@ -15,12 +15,11 @@ import static org.lwjgl.opengl.GL20.glGetShaderInfoLog;
 public class Shader {
 
     private int shaderProgramID;
+    private boolean beingUsed = false;
 
     private String vertexSource;
     private String fragmentSource;
     private String filepath;
-
-    private boolean beingUsed = false;
 
     public Shader(String filepath) {
         this.filepath = filepath;
@@ -53,7 +52,7 @@ public class Shader {
             } else {
                 throw new IOException("Unexpected token '" + secondPattern + "'");
             }
-        } catch (IOException e) {
+        } catch(IOException e) {
             e.printStackTrace();
             assert false : "Error: Could not open file for shader: '" + filepath + "'";
         }
@@ -112,8 +111,8 @@ public class Shader {
     }
 
     public void use() {
-        // Bind shader program
         if (!beingUsed) {
+            // Bind shader program
             glUseProgram(shaderProgramID);
             beingUsed = true;
         }
@@ -158,21 +157,27 @@ public class Shader {
         glUniform2f(varLocation, vec.x, vec.y);
     }
 
-    public void uploadFloat(String varName, float value) {
+    public void uploadFloat(String varName, float val) {
         int varLocation = glGetUniformLocation(shaderProgramID, varName);
         use();
-        glUniform1f(varLocation, value);
+        glUniform1f(varLocation, val);
     }
 
-    public void uploadInt(String varName, int value) {
+    public void uploadInt(String varName, int val) {
         int varLocation = glGetUniformLocation(shaderProgramID, varName);
         use();
-        glUniform1i(varLocation, value);
+        glUniform1i(varLocation, val);
     }
 
     public void uploadTexture(String varName, int slot) {
         int varLocation = glGetUniformLocation(shaderProgramID, varName);
         use();
         glUniform1i(varLocation, slot);
+    }
+
+    public void uploadIntArray(String varName, int[] array) {
+        int varLocation = glGetUniformLocation(shaderProgramID, varName);
+        use();
+        glUniform1iv(varLocation, array);
     }
 }
