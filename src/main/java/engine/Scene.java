@@ -2,9 +2,7 @@ package engine;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import components.Sprite;
 import imgui.ImGui;
-import org.lwjgl.system.CallbackI;
 import renderer.Renderer;
 
 import java.io.FileWriter;

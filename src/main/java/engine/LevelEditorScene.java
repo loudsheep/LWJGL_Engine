@@ -1,7 +1,5 @@
 package engine;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import components.Rigidbody;
 import components.Sprite;
 import components.SpriteRenderer;
@@ -10,8 +8,6 @@ import imgui.ImGui;
 import imgui.ImVec2;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
-import org.lwjgl.system.CallbackI;
-import renderer.Texture;
 import util.AssetPool;
 
 import static org.lwjgl.glfw.GLFW.*;
