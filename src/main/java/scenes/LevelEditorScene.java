@@ -5,7 +5,9 @@ import engine.*;
 import imgui.ImGui;
 import imgui.ImVec2;
 import org.joml.Vector2f;
+import org.joml.Vector3f;
 import org.joml.Vector4f;
+import renderer.DebugDraw;
 import util.AssetPool;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -14,8 +16,9 @@ public class LevelEditorScene extends Scene {
 
     private GameObject obj1;
     private Spritesheet sprites;
+    SpriteRenderer obj1Sprite;
 
-    private MouseControls mouseControls = new MouseControls();
+    MouseControls mouseControls = new MouseControls();
 
     public LevelEditorScene() {
 
@@ -25,18 +28,15 @@ public class LevelEditorScene extends Scene {
     public void init() {
         loadResources();
         this.camera = new Camera(new Vector2f(-250, 0));
-
-        sprites = AssetPool.getSpritesheet("assets/spritesheets/decorationsAndBlocks.png");
-
+        sprites = AssetPool.getSpritesheet("assets/images/spritesheets/decorationsAndBlocks.png");
         if (levelLoaded) {
             this.activeGameObject = gameObjects.get(0);
             return;
         }
 
-
-        obj1 = new GameObject("Object 1", new Transform(
-                new Vector2f(200, 100), new Vector2f(256, 256)), -1);
-        SpriteRenderer obj1Sprite = new SpriteRenderer();
+        obj1 = new GameObject("Object 1", new Transform(new Vector2f(200, 100),
+                new Vector2f(256, 256)), 2);
+        obj1Sprite = new SpriteRenderer();
         obj1Sprite.setColor(new Vector4f(1, 0, 0, 1));
         obj1.addComponent(obj1Sprite);
         obj1.addComponent(new Rigidbody());
@@ -44,29 +44,35 @@ public class LevelEditorScene extends Scene {
         this.activeGameObject = obj1;
 
         GameObject obj2 = new GameObject("Object 2",
-                new Transform(new Vector2f(400, 100), new Vector2f(256, 256)), 1);
+                new Transform(new Vector2f(400, 100), new Vector2f(256, 256)), 3);
         SpriteRenderer obj2SpriteRenderer = new SpriteRenderer();
         Sprite obj2Sprite = new Sprite();
         obj2Sprite.setTexture(AssetPool.getTexture("assets/images/blendImage2.png"));
         obj2SpriteRenderer.setSprite(obj2Sprite);
         obj2.addComponent(obj2SpriteRenderer);
         this.addGameObjectToScene(obj2);
-
-
     }
 
     private void loadResources() {
         AssetPool.getShader("assets/shaders/default.glsl");
 
-        AssetPool.addSpritesheet("assets/spritesheets/decorationsAndBlocks.png",
-                new Spritesheet(AssetPool.getTexture("assets/spritesheets/decorationsAndBlocks.png"),
+        // TODO: FIX TEXTURE SAVE SYSTEM TO USE PATH INSTEAD OF ID
+        AssetPool.addSpritesheet("assets/images/spritesheets/decorationsAndBlocks.png",
+                new Spritesheet(AssetPool.getTexture("assets/images/spritesheets/decorationsAndBlocks.png"),
                         16, 16, 81, 0));
         AssetPool.getTexture("assets/images/blendImage2.png");
     }
 
+    float t = 0.0f;
+
     @Override
     public void update(float dt) {
         mouseControls.update(dt);
+
+        float x = ((float) Math.sin(t) * 200.0f) + 600;
+        float y = ((float) Math.cos(t) * 200.0f) + 400;
+        t += 0.05f;
+        DebugDraw.addLine2D(new Vector2f(600, 400), new Vector2f(x, y), new Vector3f(0, 0, 1), 2);
 
         for (GameObject go : this.gameObjects) {
             go.update(dt);
@@ -94,10 +100,11 @@ public class LevelEditorScene extends Scene {
             int id = sprite.getTexId();
             Vector2f[] texCoords = sprite.getTexCoords();
 
+            // TODO FLIP TEXTURE COORDS SO THAT IMAGES ARE PLACED CORRECT DIRECTION
+            // TODO ALSO CHANGE SPRITE SIZE TO 32x32
             ImGui.pushID(i);
             if (ImGui.imageButton(id, spriteWidth, spriteHeight, texCoords[0].x, texCoords[0].y, texCoords[2].x, texCoords[2].y)) {
                 GameObject object = Prefabs.generateSpriteObject(sprite, spriteWidth, spriteHeight);
-                // attach to mouse cursor
                 mouseControls.pickupObject(object);
             }
             ImGui.popID();
