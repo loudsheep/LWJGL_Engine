@@ -1,9 +1,13 @@
-package engine;
+package scenes;
 
 import components.Rigidbody;
 import components.Sprite;
 import components.SpriteRenderer;
 import components.Spritesheet;
+import engine.Camera;
+import engine.GameObject;
+import engine.KeyListener;
+import engine.Transform;
 import imgui.ImGui;
 import imgui.ImVec2;
 import org.joml.Vector2f;
