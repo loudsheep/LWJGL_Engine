@@ -15,6 +15,11 @@ public class Line2D {
         this.lifeTime = lifeTime;
     }
 
+    public Line2D(Vector2f from, Vector2f to) {
+        this.from = from;
+        this.to = to;
+    }
+
     public int beginFrame() {
         lifeTime--;
         return lifeTime;
@@ -25,6 +30,14 @@ public class Line2D {
     }
 
     public Vector2f getTo() {
+        return to;
+    }
+
+    public Vector2f getStart() {
+        return from;
+    }
+
+    public Vector2f getEnd() {
         return to;
     }
 
