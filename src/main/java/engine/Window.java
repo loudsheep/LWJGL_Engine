@@ -134,7 +134,7 @@ public class Window {
         this.imGuiLayer = new ImGuiLayer(glfwWindow);
         this.imGuiLayer.initImGui();
 
-//        this.framebuffer = new Framebuffer(1920, 1080);
+        this.framebuffer = new Framebuffer(1920, 1080);
 
         Window.changeScene(0);
     }
@@ -159,7 +159,7 @@ public class Window {
                 DebugDraw.draw();
                 currentScene.update(dt);
             }
-//            this.framebuffer.unbind();
+            this.framebuffer.unbind();
 
             this.imGuiLayer.update(dt, currentScene);
             glfwSwapBuffers(glfwWindow);
