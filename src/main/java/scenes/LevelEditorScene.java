@@ -25,7 +25,7 @@ public class LevelEditorScene extends Scene {
     @Override
     public void init() {
         levelEditorStuff.addComponent(new MouseControls());
-//        levelEditorStuff.addComponent(new GridLines());
+        levelEditorStuff.addComponent(new GridLines());
 
         obj1 = new Transform(new Vector2f(100, 500));
         obj2 = new Transform(new Vector2f(200, 500));
