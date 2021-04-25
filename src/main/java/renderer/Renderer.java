@@ -9,10 +9,11 @@ import java.util.List;
 
 public class Renderer {
     private final int MAX_BATCH_SIZE = 1000;
-    private List<RenderBatch> renderBatches;
+    private List<RenderBatch> batches;
+    private static Shader currentShader;
 
     public Renderer() {
-        this.renderBatches = new ArrayList<>();
+        this.batches = new ArrayList<>();
     }
 
     public void add(GameObject go) {
@@ -22,14 +23,13 @@ public class Renderer {
         }
     }
 
-    private void add(SpriteRenderer spr) {
+    private void add(SpriteRenderer sprite) {
         boolean added = false;
-        for (RenderBatch batch : renderBatches) {
-            if (batch.hasRoom() && batch.zIndex() == spr.gameObject.zIndex()) {
-                Texture tex = spr.getTexture();
-
+        for (RenderBatch batch : batches) {
+            if (batch.hasRoom() && batch.zIndex() == sprite.gameObject.zIndex()) {
+                Texture tex = sprite.getTexture();
                 if (tex == null || (batch.hasTexture(tex) || batch.hasTextureRoom())) {
-                    batch.addSprite(spr);
+                    batch.addSprite(sprite);
                     added = true;
                     break;
                 }
@@ -37,16 +37,25 @@ public class Renderer {
         }
 
         if (!added) {
-            RenderBatch newBatch = new RenderBatch(MAX_BATCH_SIZE, spr.gameObject.zIndex());
+            RenderBatch newBatch = new RenderBatch(MAX_BATCH_SIZE, sprite.gameObject.zIndex());
             newBatch.start();
-            renderBatches.add(newBatch);
-            newBatch.addSprite(spr);
-            Collections.sort(renderBatches);
+            batches.add(newBatch);
+            newBatch.addSprite(sprite);
+            Collections.sort(batches);
         }
     }
 
+    public static void bindShader(Shader shader) {
+        currentShader = shader;
+    }
+
+    public static Shader getBoundShader() {
+        return currentShader;
+    }
+
     public void render() {
-        for (RenderBatch batch : renderBatches) {
+        currentShader.use();
+        for (RenderBatch batch : batches) {
             batch.render();
         }
     }

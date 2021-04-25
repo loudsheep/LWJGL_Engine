@@ -4,7 +4,6 @@ import components.SpriteRenderer;
 import engine.Window;
 import org.joml.Vector2f;
 import org.joml.Vector4f;
-import util.AssetPool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,12 +22,14 @@ public class RenderBatch implements Comparable<RenderBatch> {
     private final int COLOR_SIZE = 4;
     private final int TEX_COORDS_SIZE = 2;
     private final int TEX_ID_SIZE = 1;
+    private final int ENTITY_ID_SIZE = 1;
 
     private final int POS_OFFSET = 0;
     private final int COLOR_OFFSET = POS_OFFSET + POS_SIZE * Float.BYTES;
     private final int TEX_COORDS_OFFSET = COLOR_OFFSET + COLOR_SIZE * Float.BYTES;
     private final int TEX_ID_OFFSET = TEX_COORDS_OFFSET + TEX_COORDS_SIZE * Float.BYTES;
-    private final int VERTEX_SIZE = 9;
+    private final int ENTITY_ID_OFFSET = TEX_ID_OFFSET + TEX_ID_SIZE * Float.BYTES;
+    private final int VERTEX_SIZE = 10;
     private final int VERTEX_SIZE_BYTES = VERTEX_SIZE * Float.BYTES;
 
     private SpriteRenderer[] sprites;
@@ -40,11 +41,10 @@ public class RenderBatch implements Comparable<RenderBatch> {
     private List<Texture> textures;
     private int vaoID, vboID;
     private int maxBatchSize;
-    private Shader shader;
     private int zIndex;
 
     public RenderBatch(int maxBatchSize, int zIndex) {
-        shader = AssetPool.getShader("assets/shaders/default.glsl");
+        this.zIndex = zIndex;
         this.sprites = new SpriteRenderer[maxBatchSize];
         this.maxBatchSize = maxBatchSize;
 
@@ -54,7 +54,6 @@ public class RenderBatch implements Comparable<RenderBatch> {
         this.numSprites = 0;
         this.hasRoom = true;
         this.textures = new ArrayList<>();
-        this.zIndex = zIndex;
     }
 
     public void start() {
@@ -85,6 +84,9 @@ public class RenderBatch implements Comparable<RenderBatch> {
 
         glVertexAttribPointer(3, TEX_ID_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, TEX_ID_OFFSET);
         glEnableVertexAttribArray(3);
+
+        glVertexAttribPointer(4, ENTITY_ID_SIZE, GL_FLOAT, false, VERTEX_SIZE_BYTES, ENTITY_ID_OFFSET);
+        glEnableVertexAttribArray(4);
     }
 
     public void addSprite(SpriteRenderer spr) {
@@ -109,7 +111,7 @@ public class RenderBatch implements Comparable<RenderBatch> {
 
     public void render() {
         boolean rebufferData = false;
-        for (int i = 0; i < numSprites; i++) {
+        for (int i=0; i < numSprites; i++) {
             SpriteRenderer spr = sprites[i];
             if (spr.isDirty()) {
                 loadVertexProperties(i);
@@ -123,10 +125,10 @@ public class RenderBatch implements Comparable<RenderBatch> {
         }
 
         // Use shader
-        shader.use();
+        Shader shader = Renderer.getBoundShader();
         shader.uploadMat4f("uProjection", Window.getScene().camera().getProjectionMatrix());
         shader.uploadMat4f("uView", Window.getScene().camera().getViewMatrix());
-        for (int i = 0; i < textures.size(); i++) {
+        for (int i=0; i < textures.size(); i++) {
             glActiveTexture(GL_TEXTURE0 + i + 1);
             textures.get(i).bind();
         }
@@ -142,7 +144,7 @@ public class RenderBatch implements Comparable<RenderBatch> {
         glDisableVertexAttribArray(1);
         glBindVertexArray(0);
 
-        for (int i = 0; i < textures.size(); i++) {
+        for (int i=0; i < textures.size(); i++) {
             textures.get(i).unbind();
         }
         shader.detach();
@@ -170,7 +172,7 @@ public class RenderBatch implements Comparable<RenderBatch> {
         // Add vertices with the appropriate properties
         float xAdd = 1.0f;
         float yAdd = 1.0f;
-        for (int i = 0; i < 4; i++) {
+        for (int i=0; i < 4; i++) {
             if (i == 1) {
                 yAdd = 0.0f;
             } else if (i == 2) {
@@ -196,6 +198,9 @@ public class RenderBatch implements Comparable<RenderBatch> {
             // Load texture id
             vertices[offset + 8] = texId;
 
+            // Load entity id
+            vertices[offset + 9] = sprite.gameObject.getUid() + 1;
+
             offset += VERTEX_SIZE;
         }
     }
@@ -203,7 +208,7 @@ public class RenderBatch implements Comparable<RenderBatch> {
     private int[] generateIndices() {
         // 6 indices per quad (3 per triangle)
         int[] elements = new int[6 * maxBatchSize];
-        for (int i = 0; i < maxBatchSize; i++) {
+        for (int i=0; i < maxBatchSize; i++) {
             loadElementIndices(elements, i);
         }
 
@@ -239,11 +244,11 @@ public class RenderBatch implements Comparable<RenderBatch> {
     }
 
     public int zIndex() {
-        return zIndex;
+        return this.zIndex;
     }
 
     @Override
     public int compareTo(RenderBatch o) {
-        return Integer.compare(this.zIndex, o.zIndex);
+        return Integer.compare(this.zIndex, o.zIndex());
     }
 }

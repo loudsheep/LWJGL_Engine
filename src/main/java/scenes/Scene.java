@@ -53,6 +53,8 @@ public abstract class Scene {
 
     public abstract void update(float dt);
 
+    public abstract void render();
+
     public Camera camera() {
         return this.camera;
     }
@@ -113,8 +115,8 @@ public abstract class Scene {
                         maxCompId = c.uid();
                     }
                 }
-                if (objects[i].uid() > maxGoId) {
-                    maxGoId = objects[i].uid();
+                if (objects[i].getUid() > maxGoId) {
+                    maxGoId = objects[i].getUid();
                 }
             }
 
