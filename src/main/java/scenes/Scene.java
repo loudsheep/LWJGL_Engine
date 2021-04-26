@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Optional;
 
 public abstract class Scene {
+
     protected Renderer renderer = new Renderer();
     protected Camera camera;
     private boolean isRunning = false;
@@ -42,23 +43,24 @@ public abstract class Scene {
         isRunning = true;
     }
 
-    public void addGameObjectToScene(GameObject gameObject) {
+    public void addGameObjectToScene(GameObject go) {
         if (!isRunning) {
-            gameObjects.add(gameObject);
+            gameObjects.add(go);
         } else {
-            gameObjects.add(gameObject);
-            gameObject.start();
-            renderer.add(gameObject);
+            gameObjects.add(go);
+            go.start();
+            this.renderer.add(go);
         }
     }
 
-    public GameObject getGameObject(int id) {
-        Optional<GameObject> result = this.gameObjects.stream().filter(go -> go.getUid() == id).findFirst();
+    public GameObject getGameObject(int gameObjectId) {
+        Optional<GameObject> result = this.gameObjects.stream()
+                .filter(gameObject -> gameObject.getUid() == gameObjectId)
+                .findFirst();
         return result.orElse(null);
     }
 
     public abstract void update(float dt);
-
     public abstract void render();
 
     public Camera camera() {
@@ -78,9 +80,15 @@ public abstract class Scene {
 
         try {
             FileWriter writer = new FileWriter("level.txt");
-            writer.write(gson.toJson(this.gameObjects));
+            List<GameObject> objsToSerialize = new ArrayList<>();
+            for (GameObject obj : this.gameObjects) {
+                if (obj.doSerialization()) {
+                    objsToSerialize.add(obj);
+                }
+            }
+            writer.write(gson.toJson(objsToSerialize));
             writer.close();
-        } catch (IOException e) {
+        } catch(IOException e) {
             e.printStackTrace();
         }
     }
@@ -91,10 +99,10 @@ public abstract class Scene {
                 .registerTypeAdapter(Component.class, new ComponentDeserializer())
                 .registerTypeAdapter(GameObject.class, new GameObjectDeserializer())
                 .create();
+
         String inFile = "";
         try {
             inFile = new String(Files.readAllBytes(Paths.get("level.txt")));
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -102,23 +110,22 @@ public abstract class Scene {
         if (!inFile.equals("")) {
             int maxGoId = -1;
             int maxCompId = -1;
-            GameObject[] objects = gson.fromJson(inFile, GameObject[].class);
-            for (int i = 0; i < objects.length; i++) {
-                addGameObjectToScene(objects[i]);
+            GameObject[] objs = gson.fromJson(inFile, GameObject[].class);
+            for (int i=0; i < objs.length; i++) {
+                addGameObjectToScene(objs[i]);
 
-                for (Component c : objects[i].getAllComponents()) {
-                    if (c.uid() > maxCompId) {
-                        maxCompId = c.uid();
+                for (Component c : objs[i].getAllComponents()) {
+                    if (c.getUid() > maxCompId) {
+                        maxCompId = c.getUid();
                     }
                 }
-                if (objects[i].getUid() > maxGoId) {
-                    maxGoId = objects[i].getUid();
+                if (objs[i].getUid() > maxGoId) {
+                    maxGoId = objs[i].getUid();
                 }
             }
 
             maxGoId++;
             maxCompId++;
-
             GameObject.init(maxGoId);
             Component.init(maxCompId);
             this.levelLoaded = true;

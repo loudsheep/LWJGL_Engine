@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class GameObject {
-
     private static int ID_COUNTER = 0;
     private int uid = -1;
 
@@ -14,6 +13,7 @@ public class GameObject {
     private List<Component> components;
     public Transform transform;
     private int zIndex;
+    private boolean doSerialization = true;
 
     public GameObject(String name, Transform transform, int zIndex) {
         this.name = name;
@@ -40,7 +40,7 @@ public class GameObject {
     }
 
     public <T extends Component> void removeComponent(Class<T> componentClass) {
-        for (int i=0; i < components.size(); i++) {
+        for (int i = 0; i < components.size(); i++) {
             Component c = components.get(i);
             if (componentClass.isAssignableFrom(c.getClass())) {
                 components.remove(i);
@@ -55,18 +55,14 @@ public class GameObject {
         c.gameObject = this;
     }
 
-    public List<Component> getAllComponents() {
-        return this.components;
-    }
-
     public void update(float dt) {
-        for (int i=0; i < components.size(); i++) {
+        for (int i = 0; i < components.size(); i++) {
             components.get(i).update(dt);
         }
     }
 
     public void start() {
-        for (int i=0; i < components.size(); i++) {
+        for (int i = 0; i < components.size(); i++) {
             components.get(i).start();
         }
     }
@@ -81,11 +77,23 @@ public class GameObject {
         return this.zIndex;
     }
 
+    public static void init(int maxId) {
+        ID_COUNTER = maxId;
+    }
+
     public int getUid() {
         return this.uid;
     }
 
-    public static void init(int maxId) {
-        ID_COUNTER = maxId;
+    public List<Component> getAllComponents() {
+        return this.components;
+    }
+
+    public void setNoSerialize() {
+        this.doSerialization = false;
+    }
+
+    public boolean doSerialization() {
+        return this.doSerialization;
     }
 }
