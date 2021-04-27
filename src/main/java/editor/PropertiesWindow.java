@@ -1,5 +1,6 @@
 package editor;
 
+import components.NonPickable;
 import engine.GameObject;
 import engine.MouseListener;
 import imgui.ImGui;
@@ -25,7 +26,12 @@ public class PropertiesWindow {
             int x = (int) MouseListener.getScreenX();
             int y = (int) MouseListener.getScreenY();
             int gameObjectId = pickingTexture.readPixel(x, y);
-            activeGameObject = currentScene.getGameObject(gameObjectId);
+            GameObject pickedObject = currentScene.getGameObject(gameObjectId);
+            if (pickedObject != null && pickedObject.getComponent(NonPickable.class) == null) {
+                activeGameObject = pickedObject;
+            } else if (pickedObject == null && !MouseListener.isDragging()) {
+                activeGameObject = null;
+            }
             this.debounce = 0.2f;
         }
     }
