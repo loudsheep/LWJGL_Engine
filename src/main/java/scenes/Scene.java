@@ -4,11 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import components.Component;
 import components.ComponentDeserializer;
-import editor.GameViewWindow;
 import engine.Camera;
 import engine.GameObject;
 import engine.GameObjectDeserializer;
-import imgui.ImGui;
 import renderer.Renderer;
 
 import java.io.FileWriter;

@@ -3,7 +3,6 @@ package engine;
 import org.lwjgl.Version;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.opengl.GL;
-import org.lwjgl.system.CallbackI;
 import renderer.*;
 import scenes.LevelEditorScene;
 import scenes.LevelScene;

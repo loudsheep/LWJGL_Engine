@@ -4,7 +4,6 @@ import engine.Camera;
 import engine.KeyListener;
 import engine.MouseListener;
 import org.joml.Vector2f;
-import org.lwjgl.system.CallbackI;
 
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_KP_DECIMAL;
 import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_MIDDLE;

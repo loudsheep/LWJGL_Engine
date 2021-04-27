@@ -7,18 +7,18 @@ import static org.lwjgl.glfw.GLFW.GLFW_KEY_E;
 import static org.lwjgl.glfw.GLFW.GLFW_KEY_R;
 
 public class GizmoSystem extends Component {
-    private Spritesheet gizoms;
+    private Spritesheet gizmos;
     private int usingGizmo = 0;
 
     public GizmoSystem(Spritesheet gizmoSprites) {
-        gizoms = gizmoSprites;
+        gizmos = gizmoSprites;
     }
 
     @Override
     public void start() {
-        gameObject.addComponent(new TranslateGizmo(gizoms.getSprite(1),
+        gameObject.addComponent(new TranslateGizmo(gizmos.getSprite(1),
                 Window.getImguiLayer().getPropertiesWindow()));
-        gameObject.addComponent(new ScaleGizmo(gizoms.getSprite(2),
+        gameObject.addComponent(new ScaleGizmo(gizmos.getSprite(2),
                 Window.getImguiLayer().getPropertiesWindow()));
     }
 

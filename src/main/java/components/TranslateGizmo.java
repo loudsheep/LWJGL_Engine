@@ -2,10 +2,6 @@ package components;
 
 import editor.PropertiesWindow;
 import engine.*;
-import org.joml.Vector2f;
-import org.joml.Vector4f;
-
-import static org.lwjgl.glfw.GLFW.GLFW_MOUSE_BUTTON_LEFT;
 
 public class TranslateGizmo extends Gizmo {
     public TranslateGizmo(Sprite arrowSprite, PropertiesWindow propertiesWindow) {

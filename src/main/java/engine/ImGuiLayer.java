@@ -11,7 +11,6 @@ import imgui.callback.ImStrSupplier;
 import imgui.flag.*;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.type.ImBoolean;
-import org.lwjgl.system.CallbackI;
 import renderer.PickingTexture;
 import scenes.Scene;
 
