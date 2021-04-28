@@ -7,6 +7,7 @@ import components.ComponentDeserializer;
 import engine.Camera;
 import engine.GameObject;
 import engine.GameObjectDeserializer;
+import engine.Transform;
 import renderer.Renderer;
 
 import java.io.FileWriter;
@@ -26,11 +27,16 @@ public abstract class Scene {
     protected boolean levelLoaded = false;
 
     public Scene() {
-
     }
 
     public void init() {
+    }
 
+    public GameObject createGameObject(String name) {
+        GameObject go = new GameObject(name);
+        go.addComponent(new Transform());
+        go.transform = go.getComponent(Transform.class);
+        return go;
     }
 
     public void start() {
@@ -59,6 +65,7 @@ public abstract class Scene {
     }
 
     public abstract void update(float dt);
+
     public abstract void render();
 
     public Camera camera() {
@@ -86,7 +93,7 @@ public abstract class Scene {
             }
             writer.write(gson.toJson(objsToSerialize));
             writer.close();
-        } catch(IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -109,7 +116,7 @@ public abstract class Scene {
             int maxGoId = -1;
             int maxCompId = -1;
             GameObject[] objs = gson.fromJson(inFile, GameObject[].class);
-            for (int i=0; i < objs.length; i++) {
+            for (int i = 0; i < objs.length; i++) {
                 addGameObjectToScene(objs[i]);
 
                 for (Component c : objs[i].getAllComponents()) {

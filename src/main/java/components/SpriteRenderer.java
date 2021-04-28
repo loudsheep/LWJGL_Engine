@@ -1,5 +1,6 @@
 package components;
 
+import editor.EImGui;
 import engine.Transform;
 import imgui.ImGui;
 import org.joml.Vector2f;
@@ -42,8 +43,7 @@ public class SpriteRenderer extends Component {
     @Override
     public void imgui() {
         float[] imColors = {color.x, color.y, color.z, color.w};
-        if (ImGui.colorPicker4("Color picker", imColors)) {
-            this.color.set(imColors[0], imColors[1], imColors[2], imColors[3]);
+        if (EImGui.colorPicker4("Color picker", this.color)) {
             this.isDirty = true;
         }
     }
