@@ -5,8 +5,8 @@ import engine.*;
 import imgui.ImGui;
 import imgui.ImVec2;
 import org.joml.Vector2f;
-import physics2d.PhysicsSystem2D;
-import physics2d.rigidbody.Rigidbody2D;
+import physics2dtmp.PhysicsSystem2D;
+import physics2dtmp.rigidbody.Rigidbody2D;
 import util.AssetPool;
 
 public class LevelEditorScene extends Scene {

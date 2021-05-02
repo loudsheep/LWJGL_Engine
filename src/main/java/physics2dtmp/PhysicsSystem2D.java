@@ -1,9 +1,9 @@
-package physics2d;
+package physics2dtmp;
 
 import org.joml.Vector2f;
-import physics2d.forces.ForceRegistry;
-import physics2d.forces.Gravity2D;
-import physics2d.rigidbody.Rigidbody2D;
+import physics2dtmp.forces.ForceRegistry;
+import physics2dtmp.forces.Gravity2D;
+import physics2dtmp.rigidbody.Rigidbody2D;
 
 import java.util.ArrayList;
 import java.util.List;
