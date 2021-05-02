@@ -24,6 +24,10 @@ public abstract class Component {
 
     }
 
+    public void editorUpdate(float dt) {
+
+    }
+
     public void imgui() {
         try {
             Field[] fields = this.getClass().getDeclaredFields();
@@ -43,27 +47,27 @@ public abstract class Component {
                 String name = field.getName();
 
                 if (type == int.class) {
-                    int val = (int)value;
+                    int val = (int) value;
                     field.set(this, EImGui.dragInt(name, val));
                 } else if (type == float.class) {
-                    float val = (float)value;
+                    float val = (float) value;
                     field.set(this, EImGui.dragFloat(name, val));
                 } else if (type == boolean.class) {
-                    boolean val = (boolean)value;
+                    boolean val = (boolean) value;
                     if (ImGui.checkbox(name + ": ", val)) {
                         field.set(this, !val);
                     }
                 } else if (type == Vector2f.class) {
-                    Vector2f val = (Vector2f)value;
+                    Vector2f val = (Vector2f) value;
                     EImGui.drawVec2Control(name, val);
                 } else if (type == Vector3f.class) {
-                    Vector3f val = (Vector3f)value;
+                    Vector3f val = (Vector3f) value;
                     float[] imVec = {val.x, val.y, val.z};
                     if (ImGui.dragFloat3(name + ": ", imVec)) {
                         val.set(imVec[0], imVec[1], imVec[2]);
                     }
                 } else if (type == Vector4f.class) {
-                    Vector4f val = (Vector4f)value;
+                    Vector4f val = (Vector4f) value;
                     EImGui.colorPicker4(name, val);
                 }
 
@@ -85,6 +89,9 @@ public abstract class Component {
 
     public int getUid() {
         return this.uid;
+    }
+
+    public void destroy() {
     }
 
     public static void init(int maxId) {

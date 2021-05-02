@@ -45,6 +45,15 @@ public class Renderer {
         }
     }
 
+    public void destroyGameObject(GameObject gameObject) {
+        if (gameObject.getComponent(SpriteRenderer.class) == null) return;
+        for (RenderBatch batch : batches) {
+            if (batch.destroyIfExists(gameObject)) {
+                return;
+            }
+        }
+    }
+
     public static void bindShader(Shader shader) {
         currentShader = shader;
     }
