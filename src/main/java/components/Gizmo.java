@@ -125,8 +125,8 @@ public class Gizmo extends Component {
     private boolean checkXHoverState() {
         Vector2f mousePos = new Vector2f(MouseListener.getOrthoX(), MouseListener.getOrthoY());
         if (mousePos.x <= xAxisObject.transform.position.x + (gizmoHeight / 2.0f) &&
-                mousePos.x >= xAxisObject.transform.position.x - (gizmoWidth / 2.0f) &&
-                mousePos.y >= xAxisObject.transform.position.y - (gizmoHeight / 2.0f) &&
+                mousePos.x >= xAxisObject.transform.position.x - (gizmoHeight / 2.0f) &&
+                mousePos.y >= xAxisObject.transform.position.y - (gizmoWidth / 2.0f) &&
                 mousePos.y <= xAxisObject.transform.position.y + (gizmoWidth / 2.0f)) {
             xAxisSprite.setColor(xAxisColorHover);
             return true;
