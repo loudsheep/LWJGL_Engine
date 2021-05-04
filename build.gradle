@@ -25,7 +25,7 @@ test {
 project.ext.lwjglVersion = "3.2.3"
 project.ext.jomlVersion = "1.9.25"
 project.ext.lwjglNatives = "natives-windows"
-project.ext.imguiVersion = "1.77-0.17.1"
+project.ext.imguiVersion = "1.81.0"
 
 dependencies {
     // box2d
@@ -35,7 +35,7 @@ dependencies {
     testImplementation('junit:junit:4.13')
 
     // ImGUI stuff
-    implementation "io.github.spair:imgui-java-app:1.82.1"
+    implementation "io.github.spair:imgui-java-app:$imguiVersion"
 
     // GSON stuff
     implementation 'com.google.code.gson:gson:2.8.6'

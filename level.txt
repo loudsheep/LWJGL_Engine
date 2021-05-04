@@ -1,6 +1,6 @@
 [
   {
-    "uid": 0,
+    "uid": 32,
     "name": "Sprite_Object_Gen",
     "components": [
       {
@@ -97,7 +97,7 @@
     "isDead": false
   },
   {
-    "uid": 1,
+    "uid": 33,
     "name": "Sprite_Object_Gen",
     "components": [
       {
@@ -194,7 +194,7 @@
     "isDead": false
   },
   {
-    "uid": 2,
+    "uid": 34,
     "name": "Sprite_Object_Gen",
     "components": [
       {
